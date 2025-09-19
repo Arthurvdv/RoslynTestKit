@@ -4,17 +4,16 @@ using Microsoft.CodeAnalysis.CodeActions;
 
 namespace RoslynTestKit.CodeActionLocators
 {
-    public class ByTitleCodeActionSelector: ICodeActionSelector
+    public class ByTitleCodeActionSelector : ICodeActionSelector
     {
         private readonly string _title;
-       
+
         public ByTitleCodeActionSelector(string title)
         {
             _title = title;
         }
 
-
-        public CodeAction Find(IReadOnlyList<CodeAction> actions)
+        public CodeAction? Find(IReadOnlyList<CodeAction> actions)
         {
             return actions.FirstOrDefault(x => x.Title == _title);
         }
