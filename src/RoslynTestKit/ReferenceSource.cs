@@ -21,7 +21,8 @@ namespace RoslynTestKit
             if (trustedPlatformAssemblies != null)
             {
                 _netCoreAssemblies = ((string)trustedPlatformAssemblies)?.Split(Path.PathSeparator);
-                NetStandardCore = MetadataReference.CreateFromFile(_netCoreAssemblies.FirstOrDefault(x => x.EndsWith("mscorlib.dll")));
+                var mscorlibPath = _netCoreAssemblies?.FirstOrDefault(x => x.EndsWith("mscorlib.dll"));
+                NetStandardCore = !string.IsNullOrEmpty(mscorlibPath) ? MetadataReference.CreateFromFile(mscorlibPath) : null;
             }
             else
             {
@@ -33,7 +34,7 @@ namespace RoslynTestKit
         internal static readonly Lazy<IReadOnlyList<MetadataReference>> NetStandardBasicLibs = new Lazy<IReadOnlyList<MetadataReference>>(() => GetNetStandardCoreLibs().ToList());
         internal static IEnumerable<MetadataReference> GetNetStandardCoreLibs()
         {
-            if (NetStandardCore != null)
+            if (NetStandardCore != null && _netCoreAssemblies != null)
             {
                 yield return NetStandardCore;
 
